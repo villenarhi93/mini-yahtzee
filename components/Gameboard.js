@@ -54,7 +54,7 @@ export default Gameboard = ({ navigation, route }) => {
     }
 
     const pointsToSelectRow = [];
-    for (let numberButton = 0; numberButton < NBR_OF_DICES; numberButton++) {
+    for (let numberButton = 0; numberButton < MAX_SPOT; numberButton++) {
         pointsToSelectRow.push(
             <Col key={'buttonsRow' + numberButton}>
                 <Pressable
@@ -100,6 +100,15 @@ export default Gameboard = ({ navigation, route }) => {
             <Header />
             <View>
                 <Text>Gameboard</Text>
+                <Container fluid>
+                    <Row>{dicesRow}</Row>
+                </Container>
+                <Container fluid>
+                    <Row>{pointsRow}</Row>
+                </Container>
+                <Container fluid>
+                    <Row>{pointsToSelectRow}</Row>
+                </Container>
                 <Text>Player: {playerName}</Text>
             </View>
             <Footer />
