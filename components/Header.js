@@ -6,7 +6,7 @@ export default function Header() {
     return (
         <View style={styles.header}>
             <Text style={styles.title}>
-                Dices game
+                Mini-Yahtzee
             </Text>
         </View>
     )
