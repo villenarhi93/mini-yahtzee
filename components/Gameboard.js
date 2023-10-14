@@ -24,6 +24,12 @@ export default Gameboard = ({ navigation, route }) => {
     const [dicePointsTotal, setDicePointsTotal] = 
         useState(new Array(MAX_SPOT).fill(0));
     
+    useEffect(() => {
+        if (playerName === '' && route.params?.player) {
+            setPlayerName(route.params.player);
+        }
+    }, [])
+
     const dicesRow = [];
     for ( let dice = 0; dice < NBR_OF_DICES ; dice++ ) {
         dicesRow.push(
@@ -71,6 +77,29 @@ export default Gameboard = ({ navigation, route }) => {
         );
     }
 
+    const throwDices = () => {
+        if (nbrOfThrowsLeft === 0 && !gameEndStatus) {
+            setStatus('Select your points before the next throw');
+            return 1;
+        }
+        else if (nbrOfThrowsLeft === 0 && gameEndStatus) {
+            setGameEndStatus(false);
+            diceSpots.fill(0);
+            dicePointsTotal.fill(0);
+        }
+        let spots = [...diceSpots];
+        for (let i = 0 ; i < NBR_OF_DICES ; i++ ) {
+            if (!selectedDices[i]) {
+                let randomNumber = Math.floor(Math.random() * 6 + 1);
+                board[i] = 'dice-' + randomNumber;
+                spots[i] = randomNumber;
+            }
+        }
+        setNbrOfThrowsLeft(nbrOfThrowsLeft-1);
+        setDiceSpots(spots);
+        setStatus('Select and throw dices again')
+    }
+
     function getSpotTotal(i) {
         return dicePointsTotal[i];
     }
@@ -89,12 +118,6 @@ export default Gameboard = ({ navigation, route }) => {
         return selectedDices[i] ? 'black' : 'steelblue';
     }
 
-    useEffect(() => {
-        if (playerName === '' && route.params?.player) {
-            setPlayerName(route.params.player);
-        }
-    }, [])
-
     return (
         <>
             <Header />
@@ -103,6 +126,12 @@ export default Gameboard = ({ navigation, route }) => {
                 <Container fluid>
                     <Row>{dicesRow}</Row>
                 </Container>
+                <Text>Throws left: {nbrOfThrowsLeft}</Text>
+                <Text>{status}</Text>
+                <Pressable
+                    onPress={() => throwDices()}>
+                    <Text>THROW DICES</Text>
+                </Pressable>
                 <Container fluid>
                     <Row>{pointsRow}</Row>
                 </Container>
