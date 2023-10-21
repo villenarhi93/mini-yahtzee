@@ -3,9 +3,11 @@ import Header from './Header';
 import Footer from './Footer';
 import styles from '../style/style';
 import { useEffect, useState } from 'react';
-import { NBR_OF_DICES, NBR_OF_THROWS, MIN_SPOT, MAX_SPOT, BONUS_POINTS_LIMIT, BONUS_POINTS } from '../constants/Game';
+import { NBR_OF_DICES, NBR_OF_THROWS, MIN_SPOT, MAX_SPOT, BONUS_POINTS_LIMIT, BONUS_POINTS, SCOREBOARD_KEY } from '../constants/Game';
 import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { json } from 'react-router-dom';
 
 let board = [];
 
@@ -23,12 +25,22 @@ export default Gameboard = ({ navigation, route }) => {
         useState(new Array(MAX_SPOT).fill(false));
     const [dicePointsTotal, setDicePointsTotal] = 
         useState(new Array(MAX_SPOT).fill(0));
-    
+    const [scores, setScores] = useState([]);
+    const [bonusPoints, setBonusPoints] = useState(0);
+
+
     useEffect(() => {
         if (playerName === '' && route.params?.player) {
             setPlayerName(route.params.player);
         }
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getScoreboardData();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     const dicesRow = [];
     for ( let dice = 0; dice < NBR_OF_DICES ; dice++ ) {
@@ -77,6 +89,60 @@ export default Gameboard = ({ navigation, route }) => {
         );
     }
 
+    const selectDicePoints = (i) => {
+        if (nbrOfThrowsLeft === 0) {
+            let selectedPoints = [...selectedDicePoints];
+            let points = [...dicePointsTotal];
+            if (!selectedPoints[i]) {
+            selectedPoints[i] = true;
+            let nbrOfDices = diceSpots.reduce((total, x) => (x === (i+1) ? total + 1 : total), 0);
+            points[i] = nbrOfDices * (i + 1);
+            } 
+            else {
+                setStatus('You already selected points for ' + (i + 1));
+                return points[i];
+            }
+            setDicePointsTotal(points);
+            setSelectedDicePoints(selectedPoints);
+            return points[i];
+        }
+        else {
+            setStatus('Throw ' + NBR_OF_THROWS + ' times before setting points');
+        }
+    }
+
+    const savePlayerPoints = async() => {
+        const newKey = scores.length + 1;
+        const playerPoints = {
+            key: newKey,
+            name: playerName,
+            date: 'date', //pvm funktiolla 
+            time: 'time', //kellonaika funktiolla
+            points: 0 //yhteispisteet (+ mahd. bonus)
+        }
+        try {
+            const newScore = [...scores, playerPoints];
+            const jsonValue = JSON.stringify(newScore);
+            await AsyncStorage.setItem(SCOREBOARD_KEY, jsonValue);
+        }
+        catch (e) {
+            console.log('Save error:' + e);
+        }
+    }
+
+    const getScoreboardData = async() => {
+        try {
+            const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
+            if (jsonValue !== null) {
+                let tmpScores = JSON.parse(jsonValue);
+                setScores(tmpScores);
+            }
+        }
+        catch(e) {
+            console.log('Read error: ' + e);
+        }
+    }
+
     const throwDices = () => {
         if (nbrOfThrowsLeft === 0 && !gameEndStatus) {
             setStatus('Select your points before the next throw');
@@ -118,6 +184,10 @@ export default Gameboard = ({ navigation, route }) => {
         return selectedDices[i] ? 'black' : 'steelblue';
     }
 
+    function getDicePointsColor(i) {
+        return selectedDicePoints[i] && !gameEndStatus ? 'black' : 'steelblue';
+    }
+
     return (
         <>
             <Header />
@@ -138,6 +208,10 @@ export default Gameboard = ({ navigation, route }) => {
                 <Container fluid>
                     <Row>{pointsToSelectRow}</Row>
                 </Container>
+                <Pressable
+                    onPress={ () => savePlayerPoints()}>
+                    <Text>SAVE POINTS</Text>
+                </Pressable>
                 <Text>Player: {playerName}</Text>
             </View>
             <Footer />
