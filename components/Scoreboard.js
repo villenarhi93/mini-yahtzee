@@ -43,9 +43,29 @@ export default Scoreboard = ({ navigation }) => {
 
     return (
         <>
-            <Header />
+          <Header />
             <View>
-                <Text>Scoreboard</Text>
+              <Text>Scoreboard</Text>
+                { scores.length === 0 ? 
+                  <Text>Scoreboard is empty</Text>
+                    :
+                    scores.map((player, index) => (
+                      index < NBR_OF_SCOREBOARD_ROWS && 
+                      <DataTable.Row key={player.key}>
+                        <DataTable.Cell><Text>{index + 1}.</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.name}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.date}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.time}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.points}</Text></DataTable.Cell>
+                      </DataTable.Row>
+                    ))
+                }
+            </View>
+            <View>
+              <Pressable
+                onPress={() => clearScoreboard()}>
+                  <Text>CLEAR SCOREBOARD</Text>
+              </Pressable>
             </View>
             <Footer />
         </>
