@@ -7,6 +7,7 @@ import { NBR_OF_DICES, NBR_OF_THROWS, MIN_SPOT, MAX_SPOT, BONUS_POINTS_LIMIT, BO
 import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native';
 
 let board = [];
 
@@ -191,15 +192,14 @@ export default Gameboard = ({ navigation, route }) => {
         <>
             <Header />
             <View>
-                <Text>Gameboard</Text>
-                <Container fluid>
+                <Text style={styles.gameboard}>Gameboard</Text>
+                <Container fluid style={styles.dices}>
                     <Row>{dicesRow}</Row>
                 </Container>
-                <Text>Throws left: {nbrOfThrowsLeft}</Text>
-                <Text>{status}</Text>
-                <Pressable
-                    onPress={() => throwDices()}>
-                    <Text>THROW DICES</Text>
+                <Text style={styles.gameboardText}>Throws left: {nbrOfThrowsLeft}</Text>
+                <Text style={styles.gameboardText}>{status}</Text>
+                <Pressable style={styles.button} onPress={() => throwDices()}>
+                    <Text style={styles.buttonText}>THROW DICES</Text>
                 </Pressable>
                 <Container fluid>
                     <Row>{pointsRow}</Row>
@@ -207,11 +207,10 @@ export default Gameboard = ({ navigation, route }) => {
                 <Container fluid>
                     <Row>{pointsToSelectRow}</Row>
                 </Container>
-                <Pressable
-                    onPress={ () => savePlayerPoints()}>
-                    <Text>SAVE POINTS</Text>
+                <Pressable style={styles.button} onPress={ () => savePlayerPoints()}>
+                    <Text style={styles.buttonText}>SAVE POINTS</Text>
                 </Pressable>
-                <Text>Player: {playerName}</Text>
+                <Text style={styles.gameboardText}>Player: {playerName}</Text>
             </View>
             <Footer />
         </>

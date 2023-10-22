@@ -51,6 +51,9 @@ export default StyleSheet.create({
         color:'white',
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+        marginLeft: 120
     },
     buttonText: {
         color: "white",
@@ -93,6 +96,22 @@ export default StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       margin: 10
-    }
+    },
+
+  gameboard: {
+    textAlign:'center',
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 20
+  },
+  gameboardText: {
+    marginLeft: 20,
+    fontSize: 20,
+    marginBottom: 15
+  },
+  throw: {
+    backgroundColor: '#e08b2a',
+    
+  }
 
 });
