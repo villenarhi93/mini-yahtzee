@@ -118,4 +118,9 @@ export default StyleSheet.create({
   scoreboardText: {
     fontSize: 18
   },
+  pointsRow: {
+    fontSize: 20,
+    marginBottom: 20,
+    marginLeft: 7
+  }
 });

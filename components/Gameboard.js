@@ -204,7 +204,7 @@ export default Gameboard = ({ navigation, route }) => {
                   </Pressable>
                 </View>
                 <Container fluid>
-                    <Row>{pointsRow}</Row>
+                  <Row style={styles.pointsRow}>{pointsRow}</Row>
                 </Container>
                 <Container fluid>
                     <Row>{pointsToSelectRow}</Row>
