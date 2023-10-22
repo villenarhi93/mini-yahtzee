@@ -6,6 +6,7 @@ import Footer from './Footer';
 import { NBR_OF_SCOREBOARD_ROWS, SCOREBOARD_KEY } from '../constants/Game';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../style/style';
+import { Alert } from 'react-native';
 
 export default Scoreboard = ({ navigation }) => {
 
@@ -35,6 +36,7 @@ export default Scoreboard = ({ navigation }) => {
         try {
             await AsyncStorage.clear();
             setScores([]);
+            Alert.alert('Saved scores deleted!')
         }   
         catch(e) {
             console.log('Clear error: ' + e);
@@ -52,11 +54,11 @@ export default Scoreboard = ({ navigation }) => {
                     scores.map((player, index) => (
                       index < NBR_OF_SCOREBOARD_ROWS && 
                       <DataTable.Row key={player.key}>
-                        <DataTable.Cell><Text style={styles.scoreboardText}>{index + 1}.</Text></DataTable.Cell>
-                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.name}</Text></DataTable.Cell>
-                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.date}</Text></DataTable.Cell>
-                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.time}</Text></DataTable.Cell>
-                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.points}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{index + 1}.</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.name}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.date}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.time}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text>{player.points}</Text></DataTable.Cell>
                       </DataTable.Row>
                     ))
                 }

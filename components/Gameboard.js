@@ -116,8 +116,8 @@ export default Gameboard = ({ navigation, route }) => {
         const playerPoints = {
             key: newKey,
             name: playerName,
-            date: 'date', //pvm funktiolla 
-            time: 'time', //kellonaika funktiolla
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString(), //kellonaika funktiolla
             points: 0 //yhteispisteet (+ mahd. bonus)
         }
         try {
@@ -128,8 +128,10 @@ export default Gameboard = ({ navigation, route }) => {
         catch (e) {
             console.log('Save error:' + e);
         }
+        navigation.navigate('Scoreboard');
     }
 
+    
     const getScoreboardData = async() => {
         try {
             const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
