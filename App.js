@@ -6,6 +6,7 @@ import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import styles from './style/style';
+import style from './style/style';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ export default function App() {
             }
             return <MaterialCommunityIcons 
               name={iconName}
-              size={size}
+              size={30}
               color={color}
               />
           },

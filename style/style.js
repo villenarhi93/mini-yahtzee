@@ -117,5 +117,5 @@ export default StyleSheet.create({
   },
   scoreboardText: {
     fontSize: 18
-  }
+  },
 });
