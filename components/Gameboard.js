@@ -26,8 +26,6 @@ export default Gameboard = ({ navigation, route }) => {
     const [dicePointsTotal, setDicePointsTotal] = 
         useState(new Array(MAX_SPOT).fill(0));
     const [scores, setScores] = useState([]);
-    const [bonusPoints, setBonusPoints] = useState(0);
-
 
     useEffect(() => {
         if (playerName === '' && route.params?.player) {
@@ -117,8 +115,8 @@ export default Gameboard = ({ navigation, route }) => {
             key: newKey,
             name: playerName,
             date: new Date().toLocaleDateString(),
-            time: new Date().toLocaleTimeString(), //kellonaika funktiolla
-            points: 0 //yhteispisteet (+ mahd. bonus)
+            time: new Date().toLocaleTimeString(),
+            points: scores
         }
         try {
             const newScore = [...scores, playerPoints];
@@ -131,7 +129,7 @@ export default Gameboard = ({ navigation, route }) => {
         navigation.navigate('Scoreboard');
     }
 
-    
+
     const getScoreboardData = async() => {
         try {
             const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
@@ -180,6 +178,20 @@ export default Gameboard = ({ navigation, route }) => {
         else {
             setStatus('You have to throw dices first')
         }
+    }
+
+    const checkBonusPoints = () => {
+      if (nbrOfThrowsLeft === 0 && scores >= 63) {
+        let sum = scores + 50;
+        setScores(sum);
+        setStatus('You got bonus!')
+      } else {
+        setStatus('Save your score and start a new game')
+      }
+    }
+
+    const newGame = () => {
+      
     }
 
     function getDiceColor(i) {
