@@ -53,12 +53,12 @@ export default StyleSheet.create({
         justifyContent: 'center',
         marginTop: 20,
         marginBottom: 20,
-        marginLeft: 120
     },
     buttonText: {
         color: "white",
         fontSize: 20,
         backgroundColor: "#e08b2a",
+        textAlign: 'center'
     },
     enterName: {
       fontSize: 20,
@@ -70,15 +70,16 @@ export default StyleSheet.create({
       fontSize: 24,
       textAlign: 'center'
     },
-    home: {
+    buttonView: {
       alignItems: 'center',
       justifyContent:'center'
     },
-    rules: {
+    titleMedium: {
       fontSize: 28,
       marginTop: 30,
       marginBottom: 20,
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      textAlign: 'center'
     },
     play: {
       fontSize: 24,
@@ -97,7 +98,6 @@ export default StyleSheet.create({
       fontWeight: 'bold',
       margin: 10
     },
-
   gameboard: {
     textAlign:'center',
     fontSize: 28,
@@ -109,9 +109,13 @@ export default StyleSheet.create({
     fontSize: 20,
     marginBottom: 15
   },
-  throw: {
-    backgroundColor: '#e08b2a',
-    
+  scoreboardTextEmpty: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 20
+  },
+  scoreboardText: {
+    fontSize: 18
   }
-
 });

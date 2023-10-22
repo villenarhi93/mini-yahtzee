@@ -45,26 +45,25 @@ export default Scoreboard = ({ navigation }) => {
         <>
           <Header />
             <View>
-              <Text>Scoreboard</Text>
+              <Text style={styles.titleMedium}>Scoreboard</Text>
                 { scores.length === 0 ? 
-                  <Text>Scoreboard is empty</Text>
+                  <Text style={styles.scoreboardTextEmpty}>Scoreboard is empty</Text>
                     :
                     scores.map((player, index) => (
                       index < NBR_OF_SCOREBOARD_ROWS && 
                       <DataTable.Row key={player.key}>
-                        <DataTable.Cell><Text>{index + 1}.</Text></DataTable.Cell>
-                        <DataTable.Cell><Text>{player.name}</Text></DataTable.Cell>
-                        <DataTable.Cell><Text>{player.date}</Text></DataTable.Cell>
-                        <DataTable.Cell><Text>{player.time}</Text></DataTable.Cell>
-                        <DataTable.Cell><Text>{player.points}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text style={styles.scoreboardText}>{index + 1}.</Text></DataTable.Cell>
+                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.name}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.date}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.time}</Text></DataTable.Cell>
+                        <DataTable.Cell><Text style={styles.scoreboardText}>{player.points}</Text></DataTable.Cell>
                       </DataTable.Row>
                     ))
                 }
             </View>
-            <View>
-              <Pressable
-                onPress={() => clearScoreboard()}>
-                  <Text>CLEAR SCOREBOARD</Text>
+            <View style={styles.buttonView}>
+              <Pressable style={styles.button} onPress={() => clearScoreboard()}>
+                  <Text style={styles.buttonText}>CLEAR SCOREBOARD</Text>
               </Pressable>
             </View>
             <Footer />

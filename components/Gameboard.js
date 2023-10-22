@@ -192,24 +192,28 @@ export default Gameboard = ({ navigation, route }) => {
         <>
             <Header />
             <View>
-                <Text style={styles.gameboard}>Gameboard</Text>
+                <Text style={styles.titleMedium}>Gameboard</Text>
                 <Container fluid style={styles.dices}>
                     <Row>{dicesRow}</Row>
                 </Container>
                 <Text style={styles.gameboardText}>Throws left: {nbrOfThrowsLeft}</Text>
                 <Text style={styles.gameboardText}>{status}</Text>
-                <Pressable style={styles.button} onPress={() => throwDices()}>
-                    <Text style={styles.buttonText}>THROW DICES</Text>
-                </Pressable>
+                <View style={styles.buttonView}>
+                  <Pressable style={styles.button} onPress={() => throwDices()}>
+                      <Text style={styles.buttonText}>THROW DICES</Text>
+                  </Pressable>
+                </View>
                 <Container fluid>
                     <Row>{pointsRow}</Row>
                 </Container>
                 <Container fluid>
                     <Row>{pointsToSelectRow}</Row>
                 </Container>
-                <Pressable style={styles.button} onPress={ () => savePlayerPoints()}>
+                <View style={styles.buttonView}>
+                  <Pressable style={styles.button} onPress={() => savePlayerPoints()}>
                     <Text style={styles.buttonText}>SAVE POINTS</Text>
-                </Pressable>
+                  </Pressable>
+                </View>
                 <Text style={styles.gameboardText}>Player: {playerName}</Text>
             </View>
             <Footer />

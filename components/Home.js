@@ -22,19 +22,21 @@ export default Home = ({ navigation }) => {
     return(
         <>
             <Header />
-            <View style={styles.home}>
+             <View style={styles.buttonView}>
               <MaterialCommunityIcons style={styles.icon} name="information" size={70} color='#e08b2a' />
                 {!hasPlayerName ?
                     <View>
                         <Text style={styles.enterName}>For scoreboard enter your name</Text>
                         <TextInput style={styles.textInput} onChangeText={setPlayerName} autoFocus={true} />
-                        <Pressable style={styles.button} onPress={() => handlePlayerName(playerName)}>
-                            <Text style={styles.buttonText}>OK</Text>
-                        </Pressable>
+                        <View style={styles.buttonView}>
+                          <Pressable style={styles.button} onPress={() => handlePlayerName(playerName)}>
+                              <Text style={styles.buttonText}>OK</Text>
+                          </Pressable>
+                        </View>
                     </View>
                     :
                     <>
-                        <Text style={styles.rules}>Rules of the game</Text>
+                        <Text style={styles.titleMedium}>Rules of the game</Text>
                         <Text style={styles.text} multiline='true'>
                             THE GAME: Upper section of the classic Yahtzee
                             dice game. You have {NBR_OF_DICES} dices and
