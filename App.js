@@ -38,8 +38,8 @@ export default function App() {
               color={color}
               />
           },
-        tabBarActiveTintColor: '#406f96',
-        tabBarInactiveTintColor: '#a7a7a7'
+          tabBarActiveTintColor: '#e08b2a',
+        tabBarInactiveTintColor: 'black'
       })}
     >
       <Tab.Screen name="Home" component={Home} options={{ tabBarStyle: {display: 'none' }}} />

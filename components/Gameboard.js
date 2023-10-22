@@ -180,11 +180,11 @@ export default Gameboard = ({ navigation, route }) => {
     }
 
     function getDiceColor(i) {
-        return selectedDices[i] ? 'black' : 'steelblue';
+        return selectedDices[i] ? 'black' : '#e08b2a';
     }
 
     function getDicePointsColor(i) {
-        return selectedDicePoints[i] && !gameEndStatus ? 'black' : 'steelblue';
+        return selectedDicePoints[i] && !gameEndStatus ? 'black' : '#e08b2a';
     }
 
     return (
