@@ -8,19 +8,18 @@ export default StyleSheet.create({
     header: {
         marginTop: 30,
         marginBottom: 15,
-        backgroundColor: 'skyblue',
+        backgroundColor: 'e08b2a',
         flexDirection: 'row',
     },
     footer: {
-        marginTop: 20,
-        backgroundColor: 'skyblue',
+        marginTop: 50,
+        backgroundColor: '#e08b2a',
         flexDirection: 'row'
     },
     title: {
-        color: '#fff',
         fontWeight: 'bold',
         flex: 1,
-        fontSize: 23,
+        fontSize: 32,
         textAlign: 'center',
         margin: 10,
     },
@@ -44,25 +43,56 @@ export default StyleSheet.create({
         fontSize: 20,
         marginTop: 10
     },
-    row: {
-        marginTop: 20,
-        padding: 10
-    },
-    flex: {
-        flexDirection: "row"
-    },
     button: {
-        margin: 30,
-        flexDirection: "row",
-        padding: 10,
-        backgroundColor: "#73CED6",
+        backgroundColor: "#e08b2a",
+        height: 50,
         width: 150,
         borderRadius: 15,
+        color:'white',
+        alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
     },
     buttonText: {
-        color: "#2B2B52",
-        fontSize: 20
+        color: "white",
+        fontSize: 20,
+        backgroundColor: "#e08b2a",
+    },
+    enterName: {
+      fontSize: 20,
+      textAlign: 'center',
+      marginTop: 30,
+    },
+    textInput: {
+      padding: 15,
+      fontSize: 24,
+      textAlign: 'center'
+    },
+    home: {
+      alignItems: 'center',
+      justifyContent:'center'
+    },
+    rules: {
+      fontSize: 28,
+      marginTop: 30,
+      marginBottom: 20,
+      fontWeight: 'bold'
+    },
+    play: {
+      fontSize: 24,
+      padding: 15,
+      color: 'white',
+      backgroundColor: '#e08b2a',
+      borderRadius: 15,
+      marginTop: 20
+    },
+    text: {
+      fontSize: 16,
+      margin: 8,
+    },
+    player: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      margin: 10
     }
+
 });
