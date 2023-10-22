@@ -7,7 +7,7 @@ import { NBR_OF_DICES, NBR_OF_THROWS, MIN_SPOT, MAX_SPOT, BONUS_POINTS_LIMIT, BO
 import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView } from 'react-native';
+import React from 'react';
 
 let board = [];
 
@@ -95,6 +95,7 @@ export default Gameboard = ({ navigation, route }) => {
             selectedPoints[i] = true;
             let nbrOfDices = diceSpots.reduce((total, x) => (x === (i+1) ? total + 1 : total), 0);
             points[i] = nbrOfDices * (i + 1);
+            setScores(points[i]);
             } 
             else {
                 setStatus('You already selected points for ' + (i + 1));
@@ -109,28 +110,27 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }
 
-    const savePlayerPoints = async() => {
+    const savePlayerPoints = async () => {
         const newKey = scores.length + 1;
         const playerPoints = {
             key: newKey,
             name: playerName,
             date: new Date().toLocaleDateString(),
             time: new Date().toLocaleTimeString(),
-            points: scores
-        }
+            points: 0
+        };
         try {
             const newScore = [...scores, playerPoints];
             const jsonValue = JSON.stringify(newScore);
             await AsyncStorage.setItem(SCOREBOARD_KEY, jsonValue);
-        }
-        catch (e) {
+        } catch (e) {
             console.log('Save error:' + e);
         }
         navigation.navigate('Scoreboard');
     }
 
 
-    const getScoreboardData = async() => {
+    const getScoreboardData = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
             if (jsonValue !== null) {
@@ -181,17 +181,21 @@ export default Gameboard = ({ navigation, route }) => {
     }
 
     const checkBonusPoints = () => {
-      if (nbrOfThrowsLeft === 0 && scores >= 63) {
-        let sum = scores + 50;
+      if (nbrOfThrowsLeft === 0 && scores >= BONUS_POINTS_LIMIT) {
+        let sum = scores + BONUS_POINTS;
         setScores(sum);
         setStatus('You got bonus!')
       } else {
-        setStatus('Save your score and start a new game')
+        setStatus('Save your score or start a new game')
       }
     }
 
     const newGame = () => {
-      
+        board = [];
+        setDicePointsTotal(new Array(MAX_SPOT).fill(0));
+        setSelectedDicePoints(new Array(MAX_SPOT).fill(false));
+        setNbrOfThrowsLeft(NBR_OF_THROWS);
+        diceSpots.fill(0);
     }
 
     function getDiceColor(i) {
@@ -223,10 +227,17 @@ export default Gameboard = ({ navigation, route }) => {
                 <Container fluid>
                     <Row>{pointsToSelectRow}</Row>
                 </Container>
+                <Text style={styles.titleMedium}>Your score is {scores}</Text>
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => savePlayerPoints()}>
                     <Text style={styles.buttonText}>SAVE POINTS</Text>
                   </Pressable>
+                </View>
+                <Text style={styles.gameboardText}>OR</Text>
+                <View style={styles.buttonView}>
+                    <Pressable style={styles.button} onPress={() => newGame()}>
+                        <Text style={styles.buttonText}>PLAY NEW GAME</Text>
+                    </Pressable>
                 </View>
                 <Text style={styles.gameboardText}>Player: {playerName}</Text>
             </View>
