@@ -30,7 +30,7 @@ export default Gameboard = ({ navigation, route }) => {
 
     useEffect(() => {
         if (playerName === '' && route.params?.player) {
-            setPlayerName(route.params.player);
+            setPlayerName(route.params.player); //
         }
     }, []);
 
