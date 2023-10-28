@@ -33,6 +33,14 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }, []);
 
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        getScoreboardData();
+      });
+      return unsubscribe;
+    }, [navigation]);
+
+
     const dicesRow = [];
     for ( let dice = 0; dice < NBR_OF_DICES ; dice++ ) {
         dicesRow.push(
@@ -139,7 +147,7 @@ export default Gameboard = ({ navigation, route }) => {
             setStatus('You have to throw dices first')
         }
     }
-    
+
     const savePlayerPoints = async () => {
       const newKey = scores.length + 1;
       const playerPoints = {
