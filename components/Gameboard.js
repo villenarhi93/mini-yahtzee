@@ -140,6 +140,38 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }
     
+    const savePlayerPoints = async () => {
+      const newKey = scores.length + 1;
+      const playerPoints = {
+        key: newKey,
+        name: playerName,
+        date: 'pvm',
+        time: 'klo',
+        points: 0
+      }
+      try {
+        const newScore = [...scores, playerPoints];
+        const jsonValue = JSON.stringify(newScore);
+        await AsyncStorage.setItem(SCOREBOARD_KEY, jsonValue);
+      }
+      catch (e) {
+        console.log('Save error: ' + e);
+      }
+    }
+
+    const getScoreboardData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
+        if (jsonValue !== null) {
+          let tmpScores = JSON.parse(jsonValue);
+          setScores(tmpScores);
+        }
+      }
+      catch (e) {
+        console.log('Read error: ' + e);
+      }
+    }
+
     const checkBonusPoints = () => {
       if (nbrOfThrowsLeft === 0 && scores >= BONUS_POINTS_LIMIT) {
         let sum = scores + BONUS_POINTS;
