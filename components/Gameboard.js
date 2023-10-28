@@ -186,8 +186,9 @@ export default Gameboard = ({ navigation, route }) => {
           name: playerName,
           date: date,
           time: time,
-          points: totalPoints
-        }
+          points: totalPoints,
+        };
+        
         try {
           const newScore = [...scores, playerPoints];
           const jsonValue = JSON.stringify(newScore);
