@@ -7,7 +7,6 @@ import { NBR_OF_DICES, NBR_OF_THROWS, MIN_SPOT, MAX_SPOT, BONUS_POINTS_LIMIT, BO
 import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react';
 
 let board = [];
 
@@ -26,6 +25,7 @@ export default Gameboard = ({ navigation, route }) => {
     const [dicePointsTotal, setDicePointsTotal] = 
         useState(new Array(MAX_SPOT).fill(0));
     const [scores, setScores] = useState([]);
+    const [totalPoints, setTotalPoints] = useState(0);
 
     useEffect(() => {
         if (playerName === '' && route.params?.player) {
@@ -33,13 +33,38 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }, []);
 
-    useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        getScoreboardData();
-      });
-      return unsubscribe;
-    }, [navigation]);
+    // useEffect(() => {
+    //   const unsubscribe = navigation.addListener('focus', () => {
+    //    getScoreboardData();
+    //    });
+    // return unsubscribe;
+    // }, [navigation]);
 
+    useEffect(() => {
+      setNbrOfThrowsLeft(NBR_OF_THROWS)
+      selectedDices.fill(false)
+      setStatus('Throw dices')
+      let totalPointsCounter = dicePointsTotal.reduce((sum, point) => sum + point, 0)
+      let pointsMissing = BONUS_POINTS_LIMIT - totalPointsCounter
+      if (pointsMissing > 0) {
+        setTotalPoints(totalPointsCounter)
+      }
+      else {
+        const newTotalPoints = totalPointsCounter + BONUS_POINTS;
+        setTotalPoints(newTotalPoints)
+      }
+      const allPointsSelected = selectedDicePoints.every((pointSelected) => pointSelected);
+      if (allPointsSelected) {
+        setGameEndStatus(true)
+      }
+    }, [selectedDicePoints])
+
+    useEffect(() => {
+      if (gameEndStatus) {
+        savePlayerPoints()
+        setStatus("Game over")
+      }
+    }, [gameEndStatus])
 
     const dicesRow = [];
     for ( let dice = 0; dice < NBR_OF_DICES ; dice++ ) {
@@ -148,37 +173,40 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }
 
-    const savePlayerPoints = async () => {
-      const newKey = scores.length + 1;
-      const playerPoints = {
-        key: newKey,
-        name: playerName,
-        date: 'pvm',
-        time: 'klo',
-        points: 0
-      }
-      try {
-        const newScore = [...scores, playerPoints];
-        const jsonValue = JSON.stringify(newScore);
-        await AsyncStorage.setItem(SCOREBOARD_KEY, jsonValue);
-      }
-      catch (e) {
-        console.log('Save error: ' + e);
-      }
-    }
+    const currentDate = new Date().toLocaleDateString();
+    const currentTime = new Date().toLocaleTimeString();
 
-    const getScoreboardData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
-        if (jsonValue !== null) {
-          let tmpScores = JSON.parse(jsonValue);
-          setScores(tmpScores);
+      const savePlayerPoints = async() => {
+        const newKey = scores.length + 1;
+        const playerPoints = {
+          key: newKey,
+          name: playerName,
+          date: currentDate,
+          time: currentTime,
+          points: totalPoints
+        }
+        try {
+          const newScore = [...scores, playerPoints];
+          const jsonValue = JSON.stringify(newScore);
+          await AsyncStorage.setItem(SCOREBOARD_KEY, jsonValue);
+        }
+        catch (e) {
+          console.log('Save error: ' + e)
         }
       }
-      catch (e) {
-        console.log('Read error: ' + e);
+
+      const getScoreboardData = async() => {
+        try {
+          const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
+          if (jsonValue !== null) {
+            let tmpScores = JSON.parse(jsonValue);
+            setScores(tmpScores);
+          }
+        }
+        catch (e) {
+          console.log('Read error: ' + e);
+        }
       }
-    }
 
     const checkBonusPoints = () => {
       if (nbrOfThrowsLeft === 0 && scores >= BONUS_POINTS_LIMIT) {
@@ -195,8 +223,12 @@ export default Gameboard = ({ navigation, route }) => {
         setDicePointsTotal(new Array(MAX_SPOT).fill(0));
         setSelectedDicePoints(new Array(MAX_SPOT).fill(false));
         setNbrOfThrowsLeft(NBR_OF_THROWS);
-        diceSpots.fill(0);
-    }
+        diceSpots.fill(0)
+        dicePointsTotal.fill(0)
+        setTotalPoints(0)
+        selectedDices.fill(0)
+        selectedDicePoints.fill(0)    
+      }
 
     function getDiceColor(i) {
         return selectedDices[i] ? 'black' : '#e08b2a';
@@ -210,7 +242,6 @@ export default Gameboard = ({ navigation, route }) => {
         <>
             <Header />
             <ScrollView>
-              <View>
                 <Text style={styles.titleMedium}>Gameboard</Text>
                 <Container fluid style={styles.dices}>
                   <Row>{dicesRow}</Row>
@@ -229,20 +260,13 @@ export default Gameboard = ({ navigation, route }) => {
                   <Row>{pointsToSelectRow}</Row>
                 </Container>
                 <Text style={styles.titleMedium}>Your score is {scores}</Text>
-                <Text style={styles.gameboardText}>Player: {playerName}</Text>
-                <View style={styles.buttonView}>
-                  <Pressable style={styles.button} onPress={() => savePlayerPoints()}>
-                      <Text style={styles.buttonText}>SAVE POINTS</Text>
-                  </Pressable>
-                </View>
-                <Text style={styles.gameboardText}>OR</Text>
+              <Text style={styles.gameboardText}>Player: {playerName}</Text>   
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => newGame()}>
                     <Text style={styles.buttonText}>PLAY NEW GAME</Text>
                   </Pressable>
-                </View>
               </View>
-           <Footer />
+            <Footer />
          </ScrollView>
       </>  
     )

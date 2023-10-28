@@ -12,6 +12,27 @@ export default Scoreboard = ({ navigation }) => {
 
     const [scores, setScores] = useState([]);
 
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        getScoreboardData();
+      });
+      return unsubscribe;
+    }, [navigation]);
+
+
+    const getScoreboardData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
+        if (jsonValue !== null) {
+          let tmpScores = JSON.parse(jsonValue);
+          setScores(tmpScores);
+        }
+      }
+      catch (e) {
+        console.log('Read error: ' + e)
+      }
+    }
+
     const clearScoreboard = async() => {
         try {
             await AsyncStorage.clear();
