@@ -33,12 +33,12 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }, []);
 
-    // useEffect(() => {
-    //   const unsubscribe = navigation.addListener('focus', () => {
-    //    getScoreboardData();
-    //    });
-    // return unsubscribe;
-    // }, [navigation]);
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+       getScoreboardData();
+       });
+    return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
       setNbrOfThrowsLeft(NBR_OF_THROWS)
@@ -61,8 +61,8 @@ export default Gameboard = ({ navigation, route }) => {
 
     useEffect(() => {
       if (gameEndStatus) {
+        checkBonusPoints()
         savePlayerPoints()
-        setStatus("Game over")
       }
     }, [gameEndStatus])
 
@@ -214,20 +214,18 @@ export default Gameboard = ({ navigation, route }) => {
         setScores(sum);
         setStatus('You got bonus!')
       } else {
-        setStatus('Save your score or start a new game')
+        setStatus('Press a button to start a new game')
       }
     }
 
     const newGame = () => {
-        board = [];
-        setDicePointsTotal(new Array(MAX_SPOT).fill(0));
-        setSelectedDicePoints(new Array(MAX_SPOT).fill(false));
-        setNbrOfThrowsLeft(NBR_OF_THROWS);
+        setGameEndStatus(false)
+        setStatus('Throw dices')
         diceSpots.fill(0)
         dicePointsTotal.fill(0)
         setTotalPoints(0)
         selectedDices.fill(0)
-        selectedDicePoints.fill(0)    
+        selectedDicePoints.fill(0)
       }
 
     function getDiceColor(i) {
@@ -259,7 +257,7 @@ export default Gameboard = ({ navigation, route }) => {
                 <Container fluid>
                   <Row>{pointsToSelectRow}</Row>
                 </Container>
-                <Text style={styles.titleMedium}>Your score is {scores}</Text>
+                <Text style={styles.titleMedium}>Your score is {totalPoints}</Text>
               <Text style={styles.gameboardText}>Player: {playerName}</Text>   
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => newGame()}>
