@@ -26,6 +26,7 @@ export default Gameboard = ({ navigation, route }) => {
         useState(new Array(MAX_SPOT).fill(0));
     const [scores, setScores] = useState([]);
     const [totalPoints, setTotalPoints] = useState(0);
+    const [bonusStatus, setBonusStatus] = useState('63 is the bonus limit');
 
     useEffect(() => {
         if (playerName === '' && route.params?.player) {
@@ -45,13 +46,15 @@ export default Gameboard = ({ navigation, route }) => {
       selectedDices.fill(false)
       setStatus('Throw dices')
       let countTotalPoints = dicePointsTotal.reduce((sum, point) => sum + point, 0)
-      let pointsMissing = BONUS_POINTS_LIMIT - countTotalPoints
-      if (pointsMissing > 0) {
+      let pointsFromBonus = BONUS_POINTS_LIMIT - countTotalPoints
+      if (pointsFromBonus > 0) {
         setTotalPoints(countTotalPoints)
+        setBonusStatus('You are ' + pointsFromBonus + ' points from reaching the bonus')
       }
       else {
         const newTotalPoints = countTotalPoints + BONUS_POINTS;
         setTotalPoints(newTotalPoints)
+        setBonusStatus('Congratulations you won a bonus!')
       }
       const allPointsSelected = selectedDicePoints.every((pointSelected) => pointSelected);
       if (allPointsSelected) {
@@ -61,8 +64,8 @@ export default Gameboard = ({ navigation, route }) => {
 
     useEffect(() => {
       if (gameEndStatus) {
-        checkBonusPoints()
         savePlayerPoints()
+        setStatus('Game Over. Press PLAY NEW GAME to start again')
       }
     }, [gameEndStatus])
 
@@ -173,16 +176,16 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }
 
-    const currentDate = new Date().toLocaleDateString();
-    const currentTime = new Date().toLocaleTimeString();
+    const date = new Date().toLocaleDateString();
+    const time = new Date().toLocaleTimeString();
 
       const savePlayerPoints = async() => {
         const newKey = scores.length + 1;
         const playerPoints = {
           key: newKey,
           name: playerName,
-          date: currentDate,
-          time: currentTime,
+          date: date,
+          time: time,
           points: totalPoints
         }
         try {
@@ -208,16 +211,6 @@ export default Gameboard = ({ navigation, route }) => {
         }
       }
 
-    const checkBonusPoints = () => {
-      if (nbrOfThrowsLeft === 0 && totalPoints >= BONUS_POINTS_LIMIT) {
-        let sum = totalPoints + BONUS_POINTS;
-        setScores(sum);
-        setStatus('Congratulations you got bonus! Press PLAY NEW GAME to start a new game')
-      } else {
-        setStatus('Press PLAY NEW GAME to start a new game')
-      }
-    }
-
     const newGame = () => {
         setGameEndStatus(false)
         setNbrOfThrowsLeft(NBR_OF_THROWS)
@@ -227,6 +220,7 @@ export default Gameboard = ({ navigation, route }) => {
         setTotalPoints(0)
         selectedDices.fill(0)
         selectedDicePoints.fill(0)
+        setBonusStatus('63 points is the bonus limit')
       }
 
     function getDiceColor(i) {
@@ -246,7 +240,7 @@ export default Gameboard = ({ navigation, route }) => {
                   <Row>{dicesRow}</Row>
                 </Container>
                 <Text style={styles.gameboardText}>Throws left: {nbrOfThrowsLeft}</Text>
-                <Text style={styles.gameboardText}>{status}</Text>
+                <Text style={styles.statusText}>{status}</Text>
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => throwDices()}>
                     <Text style={styles.buttonText}>THROW DICES</Text>
@@ -259,12 +253,13 @@ export default Gameboard = ({ navigation, route }) => {
                   <Row>{pointsToSelectRow}</Row>
                 </Container>
                 <Text style={styles.titleMedium}>Your score is {totalPoints}</Text>
-              <Text style={styles.gameboardText}>Player: {playerName}</Text>   
+                <Text style={styles.statusText}>{bonusStatus}</Text>
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => newGame()}>
                     <Text style={styles.buttonText}>PLAY NEW GAME</Text>
                   </Pressable>
-              </View>
+                </View>
+                <Text style={styles.gameboardText}>Player: {playerName}</Text>   
             <Footer />
          </ScrollView>
       </>  

@@ -91,7 +91,9 @@ export default StyleSheet.create({
     },
     text: {
       fontSize: 16,
-      margin: 8,
+      marginLeft: 20,
+      marginRight: 20,
+      marginBottom: 20
     },
     player: {
       fontSize: 20,
@@ -119,5 +121,11 @@ export default StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     marginLeft: 7
+  },
+  statusText: {
+    fontSize: 22,
+    textAlign: 'center',
+    marginBottom: 15
   }
-});
+}
+);
