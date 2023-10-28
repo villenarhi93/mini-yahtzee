@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View, ScrollView } from 'react-native';
 import Header from './Header';
 import Footer from './Footer';
 import styles from '../style/style';
@@ -32,13 +32,6 @@ export default Gameboard = ({ navigation, route }) => {
             setPlayerName(route.params.player);
         }
     }, []);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            getScoreboardData();
-        });
-        return unsubscribe;
-    }, [navigation]);
 
     const dicesRow = [];
     for ( let dice = 0; dice < NBR_OF_DICES ; dice++ ) {
@@ -110,39 +103,6 @@ export default Gameboard = ({ navigation, route }) => {
         }
     }
 
-    const savePlayerPoints = async () => {
-        const newKey = scores.length + 1;
-        const playerPoints = {
-            key: newKey,
-            name: playerName,
-            date: new Date().toLocaleDateString(),
-            time: new Date().toLocaleTimeString(),
-            points: 0
-        };
-        try {
-            const newScore = [...scores, playerPoints];
-            const jsonValue = JSON.stringify(newScore);
-            await AsyncStorage.setItem(SCOREBOARD_KEY, jsonValue);
-        } catch (e) {
-            console.log('Save error:' + e);
-        }
-        navigation.navigate('Scoreboard');
-    }
-
-
-    const getScoreboardData = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
-            if (jsonValue !== null) {
-                let tmpScores = JSON.parse(jsonValue);
-                setScores(tmpScores);
-            }
-        }
-        catch(e) {
-            console.log('Read error: ' + e);
-        }
-    }
-
     const throwDices = () => {
         if (nbrOfThrowsLeft === 0 && !gameEndStatus) {
             setStatus('Select your points before the next throw');
@@ -179,7 +139,7 @@ export default Gameboard = ({ navigation, route }) => {
             setStatus('You have to throw dices first')
         }
     }
-
+    
     const checkBonusPoints = () => {
       if (nbrOfThrowsLeft === 0 && scores >= BONUS_POINTS_LIMIT) {
         let sum = scores + BONUS_POINTS;
@@ -209,39 +169,41 @@ export default Gameboard = ({ navigation, route }) => {
     return (
         <>
             <Header />
-            <View>
+            <ScrollView>
+              <View>
                 <Text style={styles.titleMedium}>Gameboard</Text>
                 <Container fluid style={styles.dices}>
-                    <Row>{dicesRow}</Row>
+                  <Row>{dicesRow}</Row>
                 </Container>
                 <Text style={styles.gameboardText}>Throws left: {nbrOfThrowsLeft}</Text>
                 <Text style={styles.gameboardText}>{status}</Text>
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => throwDices()}>
-                      <Text style={styles.buttonText}>THROW DICES</Text>
+                    <Text style={styles.buttonText}>THROW DICES</Text>
                   </Pressable>
                 </View>
                 <Container fluid>
                   <Row style={styles.pointsRow}>{pointsRow}</Row>
                 </Container>
                 <Container fluid>
-                    <Row>{pointsToSelectRow}</Row>
+                  <Row>{pointsToSelectRow}</Row>
                 </Container>
                 <Text style={styles.titleMedium}>Your score is {scores}</Text>
+                <Text style={styles.gameboardText}>Player: {playerName}</Text>
                 <View style={styles.buttonView}>
                   <Pressable style={styles.button} onPress={() => savePlayerPoints()}>
-                    <Text style={styles.buttonText}>SAVE POINTS</Text>
+                      <Text style={styles.buttonText}>SAVE POINTS</Text>
                   </Pressable>
                 </View>
                 <Text style={styles.gameboardText}>OR</Text>
                 <View style={styles.buttonView}>
-                    <Pressable style={styles.button} onPress={() => newGame()}>
-                        <Text style={styles.buttonText}>PLAY NEW GAME</Text>
-                    </Pressable>
+                  <Pressable style={styles.button} onPress={() => newGame()}>
+                    <Text style={styles.buttonText}>PLAY NEW GAME</Text>
+                  </Pressable>
                 </View>
-                <Text style={styles.gameboardText}>Player: {playerName}</Text>
-            </View>
-            <Footer />
-        </>
+              </View>
+           <Footer />
+         </ScrollView>
+      </>  
     )
 }
