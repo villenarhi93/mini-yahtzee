@@ -135,7 +135,7 @@ export default Gameboard = ({ navigation, route }) => {
             return points[i];
         }
         else {
-            setStatus('Throw ' + NBR_OF_THROWS + ' times before setting points'); //
+            setStatus('Throw ' + NBR_OF_THROWS + ' times before setting points'); 
         }
     }
 
