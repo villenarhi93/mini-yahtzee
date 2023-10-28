@@ -209,17 +209,18 @@ export default Gameboard = ({ navigation, route }) => {
       }
 
     const checkBonusPoints = () => {
-      if (nbrOfThrowsLeft === 0 && scores >= BONUS_POINTS_LIMIT) {
-        let sum = scores + BONUS_POINTS;
+      if (nbrOfThrowsLeft === 0 && totalPoints >= BONUS_POINTS_LIMIT) {
+        let sum = totalPoints + BONUS_POINTS;
         setScores(sum);
-        setStatus('You got bonus!')
+        setStatus('Congratulations you got bonus! Press PLAY NEW GAME to start a new game')
       } else {
-        setStatus('Press a button to start a new game')
+        setStatus('Press PLAY NEW GAME to start a new game')
       }
     }
 
     const newGame = () => {
         setGameEndStatus(false)
+        setNbrOfThrowsLeft(NBR_OF_THROWS)
         setStatus('Throw dices')
         diceSpots.fill(0)
         dicePointsTotal.fill(0)
