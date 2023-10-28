@@ -44,13 +44,13 @@ export default Gameboard = ({ navigation, route }) => {
       setNbrOfThrowsLeft(NBR_OF_THROWS)
       selectedDices.fill(false)
       setStatus('Throw dices')
-      let totalPointsCounter = dicePointsTotal.reduce((sum, point) => sum + point, 0)
-      let pointsMissing = BONUS_POINTS_LIMIT - totalPointsCounter
+      let countTotalPoints = dicePointsTotal.reduce((sum, point) => sum + point, 0)
+      let pointsMissing = BONUS_POINTS_LIMIT - countTotalPoints
       if (pointsMissing > 0) {
-        setTotalPoints(totalPointsCounter)
+        setTotalPoints(countTotalPoints)
       }
       else {
-        const newTotalPoints = totalPointsCounter + BONUS_POINTS;
+        const newTotalPoints = countTotalPoints + BONUS_POINTS;
         setTotalPoints(newTotalPoints)
       }
       const allPointsSelected = selectedDicePoints.every((pointSelected) => pointSelected);
