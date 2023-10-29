@@ -2,15 +2,13 @@ import Home from './components/Home';
 import Gameboard from './components/Gameboard';
 import Scoreboard from './components/Scoreboard';
 import { NavigationContainer } from '@react-navigation/native';
-import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import styles from './style/style';
-import style from './style/style';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
   return (
     <NavigationContainer>
       <Tab.Navigator
