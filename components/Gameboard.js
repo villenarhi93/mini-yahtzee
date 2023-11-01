@@ -124,7 +124,7 @@ export default Gameboard = ({ navigation, route }) => {
             selectedPoints[i] = true;
             let nbrOfDices = diceSpots.reduce((total, x) => (x === (i+1) ? total + 1 : total), 0);
             points[i] = nbrOfDices * (i + 1);
-            setScores(points[i]);
+            setTotalPoints(points[i]);
             } 
             else {
                 setStatus('You already selected points for ' + (i + 1));
