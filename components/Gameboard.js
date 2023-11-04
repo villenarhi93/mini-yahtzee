@@ -62,7 +62,7 @@ export default Gameboard = ({ navigation, route }) => {
         setGameEndStatus(true)
       }
     }, [selectedDicePoints])
-
+    
     useEffect(() => {
       if (gameEndStatus) {
         savePlayerPoints()
