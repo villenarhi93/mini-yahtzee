@@ -25,6 +25,7 @@ export default Scoreboard = ({ navigation }) => {
         const jsonValue = await AsyncStorage.getItem(SCOREBOARD_KEY);
         if (jsonValue !== null) {
           let tmpScores = JSON.parse(jsonValue);
+          tmpScores.sort((a, b) => b.points - a.points);
           setScores(tmpScores);
         }
       }

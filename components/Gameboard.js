@@ -7,6 +7,7 @@ import { NBR_OF_DICES, NBR_OF_THROWS, MIN_SPOT, MAX_SPOT, BONUS_POINTS_LIMIT, BO
 import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Scoreboard from './Scoreboard';
 
 let board = [];
 
@@ -29,7 +30,7 @@ export default Gameboard = ({ navigation, route }) => {
     const [bonusStatus, setBonusStatus] = useState('63 is the bonus limit');
 
     useEffect(() => {
-        if (playerName === '' && route.params?.player) {
+        if (playerName === "" && route.params?.player) {
             setPlayerName(route.params.player);
         }
     }, []);
@@ -180,15 +181,14 @@ export default Gameboard = ({ navigation, route }) => {
     const time = new Date().toLocaleTimeString();
 
       const savePlayerPoints = async() => {
-        const newKey = scores.length + 1;
+        const newKey = totalPoints.length + 1;
         const playerPoints = {
           key: newKey,
           name: playerName,
           date: date,
           time: time,
-          points: totalPoints,
+          points: totalPoints
         };
-        
         try {
           const newScore = [...scores, playerPoints];
           const jsonValue = JSON.stringify(newScore);
